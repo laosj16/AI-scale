@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>04 - 用户选择</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* --- Common Styles --- */
+        body { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; background-color: #f3f4f6; padding: 1rem; font-family: 'Inter', sans-serif; }
+        .external-nav a { display: inline-flex; align-items: center; justify-content: center; padding: 0.5rem 1rem; background-color: #e5e7eb; color: #374151; border-radius: 0.375rem; text-decoration: none; transition: background-color 0.2s ease; font-size: 0.875rem; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); }
+        .external-nav a:hover { background-color: #d1d5db; }
+        .external-nav a i { margin-right: 0.3rem; }
+        .external-nav a.disabled { opacity: 0.5; cursor: not-allowed; pointer-events: none; background-color: #f3f4f6; box-shadow: none; }
+        /* --- Screen-Specific Styles --- */
+        .carousel-container { width: 100%; overflow: hidden; position: relative; height: 220px; display: flex; align-items: center; margin-top: 0.5rem; }
+        .carousel-slider { display: flex; transition: transform 0.5s ease-in-out; position: absolute; left: 0; height: 100%; align-items: center; }
+        .user-item { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 120px; margin: 0 15px; text-align: center; opacity: 0.5; transform: scale(0.75); transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out; flex-shrink: 0; }
+        .user-item.active { opacity: 1; transform: scale(1); }
+        .user-avatar { background-color: #4b5563; display: flex; align-items: center; justify-content: center; margin-bottom: 0.75rem; border: 4px solid transparent; overflow: hidden; }
+        .user-item.active .user-avatar { border-color: #2dd4bf; box-shadow: 0 0 15px rgba(45, 212, 191, 0.5); }
+        .user-name { color: #e0e0e0; font-weight: 500; font-size: 1rem; }
+        .user-item.active .user-name { font-weight: 600; color: #fff; }
+        /* Removed Countdown Styles */
+        /* Style for clickable body */
+        body.clickable {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="screen-container">
+        <div class="status-bar flex justify-between items-center text-base p-3 border-b-0">
+            <div class="flex items-center space-x-4"> <i class="fab fa-bluetooth-b text-blue-500 fa-lg"></i> <i class="fas fa-wifi text-green-500 fa-lg"></i> </div>
+            <span>15:38</span> <div class="flex items-center"> <i class="fas fa-battery-three-quarters fa-lg"></i> </div>
+        </div>
+        <div class="content-area justify-center items-center"> <div class="carousel-container">
+                <div id="carouselSlider" class="carousel-slider">
+                    <div class="user-item active" data-user-id="guest" data-index="0"> <div class="user-avatar w-24 h-24 rounded-2xl bg-gray-600 text-gray-300"><i class="fas fa-user-circle text-4xl"></i></div> <div class="user-name text-base">游客</div> </div>
+                    <div class="user-item" data-user-id="dadong" data-index="1"> <div class="user-avatar w-24 h-24 rounded-2xl bg-gray-600 text-gray-300"><i class="fas fa-user-astronaut text-4xl"></i></div> <div class="user-name text-base">大东</div> </div>
+                    <div class="user-item" data-user-id="xiaohe" data-index="2"> <div class="user-avatar w-24 h-24 rounded-2xl bg-gray-600 text-gray-300"><i class="fas fa-user-ninja text-4xl"></i></div> <div class="user-name text-base">小何</div> </div>
+                    <div class="user-item" data-user-id="huazai" data-index="3"> <div class="user-avatar w-24 h-24 rounded-2xl bg-gray-600 text-gray-300"><i class="fas fa-user-tie text-4xl"></i></div> <div class="user-name text-base">华仔</div> </div>
+                    </div>
+            </div>
+            <p class="text-xl font-semibold text-gray-300 mt-4">轻触秤面以切换用户</p>
+            </div>
+    </div>
+    <div class="external-nav flex justify-center items-center space-x-4 mt-6">
+        <a href="03_Detecting_Weight.html" title="上一个"> <i class="fas fa-arrow-left"></i> </a>
+        <a href="index.html" title="回到主页"> <i class="fas fa-home"></i> </a>
+        <a href="05_LLM_Analyzing.html" title="下一个"> <i class="fas fa-arrow-right"></i> </a>
+    </div>
+
+    <audio id="userSelectSound" src="audio/xzyh.mp3" preload="auto" style="display: none;"></audio>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const slider = document.getElementById('carouselSlider');
+        const originalItems = slider ? Array.from(slider.querySelectorAll('.user-item')) : [];
+        const userSelectAudio = document.getElementById('userSelectSound');
+        const totalRealItems = originalItems.length;
+        const itemWidth = 120; const itemMargin = 15; const containerWidth = 320;
+        const cloneCount = 2; // Keep clones for seamless visual effect
+        let currentDisplayIndex = cloneCount; // Start at first real item
+        let sequentialSwitchIntervalId = null; // Use Interval for fixed timing
+        const switchIntervalDuration = 800; // Fixed 0.8 seconds interval
+        const totalSwitches = totalRealItems; // Switch through all users once
+        let switchCount = 0; // Counter for switches
+        const finalPauseDuration = 1000; // Fixed 1 second pause before navigation
+        let isTransitioning = false;
+        let clickable = true; // Click to start flag
+
+        // --- Cloning Function ---
+        function setupClones() { /* ... (same as before) ... */
+             if (!slider || totalRealItems <= 1) return;
+             for (let i = 0; i < cloneCount; i++) { const clone = originalItems[i].cloneNode(true); clone.classList.add('clone'); slider.appendChild(clone); }
+             for (let i = totalRealItems - cloneCount; i < totalRealItems; i++) { const clone = originalItems[i].cloneNode(true); clone.classList.add('clone'); slider.insertBefore(clone, slider.firstChild); }
+        }
+
+        // Function to center a specific user index
+        function centerUser(displayIndex, immediate = false) { /* ... (same as before) ... */
+             if (!slider) return; const allItems = slider.querySelectorAll('.user-item'); const totalDisplayItems = allItems.length; if (displayIndex < 0 || displayIndex >= totalDisplayItems) return; const itemTotalWidth = itemWidth + itemMargin * 2; const offset = (containerWidth / 2) - (displayIndex * itemTotalWidth + itemTotalWidth / 2); isTransitioning = !immediate; slider.style.transition = immediate ? 'none' : 'transform 0.5s ease-in-out'; slider.style.transform = `translateX(${offset}px)`; const realIndex = parseInt(allItems[displayIndex].dataset.index || '0'); allItems.forEach((item, i) => { item.classList.toggle('active', i === displayIndex); }); currentDisplayIndex = displayIndex;
+        }
+
+        // Function for seamless jump
+        function handleLoopJump() {
+             if (!slider || cloneCount === 0) return;
+             const realIndexOffset = cloneCount;
+             if (currentDisplayIndex >= totalRealItems + cloneCount) {
+                 const targetRealIndex = currentDisplayIndex % totalRealItems;
+                 centerUser(targetRealIndex + realIndexOffset, true); // Jump immediately
+             }
+             isTransitioning = false;
+             // Interval handles next switch, no need to schedule here
+        }
+
+        // --- Initial Setup ---
+        if (totalRealItems > 0) {
+            setupClones();
+            const allItemsNow = slider.querySelectorAll('.user-item');
+            allItemsNow.forEach((item, i) => { if (item.classList.contains('active')) { currentDisplayIndex = i; }}); // Set initial index based on 'active' class
+            const initialOffset = (containerWidth / 2) - (currentDisplayIndex * (itemWidth + itemMargin * 2) + (itemWidth + itemMargin * 2) / 2);
+            slider.style.transition = 'none';
+            slider.style.transform = `translateX(${initialOffset}px)`;
+            allItemsNow.forEach((item, i) => { item.classList.toggle('active', i === currentDisplayIndex); });
+            slider.addEventListener('transitionend', handleLoopJump);
+        }
+
+        // --- Click Handler to Start Everything ---
+        function handleInitialClick() {
+            if (!clickable) return;
+            clickable = false;
+            document.body.classList.remove('clickable');
+            console.log("Screen clicked, playing sound and starting sequence.");
+
+            if (userSelectAudio) { userSelectAudio.play().catch(error => { console.error("User select sound playback failed:", error); }); }
+            else { console.error("User select audio element not found."); }
+
+            if (slider) slider.style.transition = 'transform 0.5s ease-in-out'; // Enable transition
+
+            // Start Sequential Switching with Fixed Interval
+            if (totalRealItems > 0) {
+                sequentialSwitchIntervalId = setInterval(() => {
+                    if (isTransitioning) return; // Skip if previous transition not finished
+
+                    switchCount++;
+                    console.log(`Switch ${switchCount}/${totalSwitches}`);
+
+                    // Perform the switch
+                    const nextDisplayIndex = currentDisplayIndex + 1;
+                    centerUser(nextDisplayIndex); // Move to next item (handles jump via transitionend)
+
+                    // Check if required number of switches completed
+                    if (switchCount >= totalSwitches) {
+                        clearInterval(sequentialSwitchIntervalId); // Stop switching
+                        if(slider) slider.removeEventListener('transitionend', handleLoopJump); // Remove listener
+                        console.log("Switching complete. Selecting final user.");
+
+                        // Find the *display* index of "华仔"
+                        let targetDisplayIndex = -1;
+                        const allItems = slider.querySelectorAll('.user-item');
+                         allItems.forEach((item, i) => { if (item.dataset.userId === 'huazai' && !item.classList.contains('clone')) { targetDisplayIndex = i; }});
+                         if (targetDisplayIndex === -1) { allItems.forEach((item, i) => { if (item.dataset.userId === 'huazai') { targetDisplayIndex = i; }}); }
+                        if (targetDisplayIndex === -1 && totalItems > 0) { targetDisplayIndex = cloneCount; } // Fallback
+
+                        // Center the target user ("华仔") if found and not already centered
+                        if (targetDisplayIndex !== -1 && currentDisplayIndex !== targetDisplayIndex) {
+                             console.log("Centering target user: 华仔");
+                              // Use timeout to ensure centering happens after last interval switch transition ends
+                             setTimeout(() => centerUser(targetDisplayIndex), 50); // Short delay before final center
+                        } else if (targetDisplayIndex !== -1 && currentDisplayIndex === targetDisplayIndex){
+                             console.log("Already centered on target user: 华仔");
+                        } else {
+                             console.log("Target user '华仔' not found or centering failed.");
+                        }
+
+                        // Navigate after the FIXED 1-second pause
+                        console.log(`Pausing on final user for ${finalPauseDuration}ms`);
+                        setTimeout(() => {
+                            console.log("Navigating to 05_LLM_Analyzing.html...");
+                            window.location.href = '05_LLM_Analyzing.html';
+                        }, finalPauseDuration); // Use fixed 1000ms delay
+                    }
+                }, switchIntervalDuration); // Use fixed 800ms interval
+            }
+        } // End of handleInitialClick
+
+        // Make body clickable immediately on load
+        document.body.classList.add('clickable');
+        document.body.addEventListener('click', handleInitialClick, { once: true });
+
+      });
+    </script>
+</body>
+</html>

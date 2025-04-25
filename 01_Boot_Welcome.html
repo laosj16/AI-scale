@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>01 - 欢迎</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* --- Common Styles (Inline) --- */
+        body { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; background-color: #f3f4f6; padding: 1rem; font-family: 'Inter', sans-serif; }
+        .external-nav a { display: inline-flex; align-items: center; justify-content: center; padding: 0.5rem 1rem; background-color: #e5e7eb; color: #374151; border-radius: 0.375rem; text-decoration: none; transition: background-color 0.2s ease; font-size: 0.875rem; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); }
+        .external-nav a:hover { background-color: #d1d5db; }
+        .external-nav a i { margin-right: 0.3rem; }
+        .external-nav a.disabled { opacity: 0.5; cursor: not-allowed; pointer-events: none; background-color: #f3f4f6; box-shadow: none; }
+        /* --- Screen-Specific Animation Styles --- */
+        .dots-container { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; width: 6rem; height: 6rem; margin-bottom: 1.5rem; margin-left: auto; margin-right: auto; animation: rotate-scale 2s linear infinite; }
+        .dot { width: 100%; height: 100%; border-radius: 50%; }
+        @keyframes rotate-scale { 0% { transform: rotate(0deg) scale(1); } 50% { transform: rotate(180deg) scale(0.7); } 100% { transform: rotate(360deg) scale(1); } }
+        /* Style for clickable area - Now targets body */
+        body.clickable {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body> <div class="screen-container">
+        <div class="content-area justify-center items-center">
+            <div id="dotsContainer" class="dots-container">
+                <div class="dot bg-slate-700"></div> <div class="dot bg-orange-500"></div>
+                <div class="dot bg-emerald-500"></div> <div class="dot bg-red-500"></div>
+            </div>
+            <div id="welcomeText" class="text-center opacity-0 transition-opacity duration-500 ease-in-out">
+                <h1 class="text-3xl font-semibold mt-4">AI智能语音体脂秤</h1>
+            </div>
+        </div>
+    </div>
+    <div class="external-nav flex justify-center items-center space-x-4 mt-6">
+        <a href="#" title="上一个" class="disabled"> <i class="fas fa-arrow-left"></i> </a>
+        <a href="index.html" title="回到主页"> <i class="fas fa-home"></i> </a>
+        <a href="02_Idle_Ready.html" title="下一个"> <i class="fas fa-arrow-right"></i> </a>
+    </div>
+
+    <audio id="bootSound" src="audio/kjyx.mp3" preload="auto" style="display: none;"></audio>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const dotsContainer = document.getElementById('dotsContainer');
+        const welcomeText = document.getElementById('welcomeText');
+        const bootSoundAudio = document.getElementById('bootSound');
+        // const mainContentArea = document.getElementById('mainContentArea'); // No longer needed
+        const animationCycleDuration = 2000;
+        const cyclesToRun = 2;
+        const textAppearDelay = animationCycleDuration * cyclesToRun; // 4000ms
+        const audioDurationEstimate = 4000; // Estimated duration of your audio (ms)
+        const fallbackNavigationDelay = audioDurationEstimate + 500; // Fallback: audio duration + 0.5s buffer
+
+        let navigated = false; // Prevent double navigation
+        let clickable = false; // Flag to control if click should work
+
+        // Function to navigate to the next page
+        function navigateToNextPage() {
+            if (navigated) return;
+            navigated = true;
+            console.log("Navigating to next page...");
+            document.body.classList.remove('clickable'); // Remove cursor from body
+            const currentPath = window.location.pathname;
+            if (currentPath.includes('01_Boot_Welcome.html') || currentPath.endsWith('/') || currentPath === '') {
+               window.location.href = '02_Idle_Ready.html';
+            }
+        }
+
+        // Function to handle the click event on the body
+        function handleClickToPlay() {
+             // Only proceed if the clickable flag is set
+             if (!clickable) return;
+
+             console.log("Screen clicked, attempting to play sound.");
+             document.body.classList.remove('clickable'); // Remove pointer cursor
+             clickable = false; // Prevent further clicks processing immediately
+
+             if (bootSoundAudio) {
+                 // Add the 'ended' listener *just before* playing
+                 bootSoundAudio.addEventListener('ended', navigateToNextPage, { once: true });
+
+                 // Try to play
+                 const playPromise = bootSoundAudio.play();
+
+                 if (playPromise !== undefined) {
+                     playPromise.then(() => {
+                         console.log("Audio playback started by click.");
+                         // Set a fallback timer in case 'ended' event fails
+                         setTimeout(navigateToNextPage, fallbackNavigationDelay);
+                     }).catch(error => {
+                         console.error("Boot sound playback failed on click:", error);
+                         bootSoundAudio.removeEventListener('ended', navigateToNextPage);
+                         setTimeout(navigateToNextPage, 500);
+                     });
+                 } else {
+                     console.warn("Audio play() did not return a promise.");
+                     setTimeout(navigateToNextPage, fallbackNavigationDelay);
+                 }
+            } else {
+                console.error("Boot sound audio element #bootSound not found.");
+                setTimeout(navigateToNextPage, 500);
+            }
+        }
+
+
+        // --- Initial Animation Logic ---
+        setTimeout(() => {
+            // Fade in text
+            if (welcomeText) {
+                welcomeText.classList.remove('opacity-0');
+                welcomeText.classList.add('opacity-100');
+            }
+            // Pause dot animation
+            if (dotsContainer) {
+                dotsContainer.style.animationPlayState = 'paused';
+            }
+
+            // --- Make body clickable and add listener ---
+            console.log("Making body clickable for sound.");
+            document.body.classList.add('clickable'); // Add cursor pointer via CSS rule
+            clickable = true; // Allow click handler to proceed
+            // Add the click listener to the body, ensure it only runs once
+            document.body.addEventListener('click', handleClickToPlay, { once: true });
+
+        }, textAppearDelay); // Trigger after text appears
+      });
+    </script>
+</body>
+</html>

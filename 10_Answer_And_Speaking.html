@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>10 - 问答展示&语音播报</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Common Styles Inline */
+        body { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; background-color: #f3f4f6; padding: 1rem; font-family: 'Inter', sans-serif; }
+        .external-nav a { display: inline-flex; align-items: center; justify-content: center; padding: 0.5rem 1rem; background-color: #e5e7eb; color: #374151; border-radius: 0.375rem; text-decoration: none; transition: background-color 0.2s ease; font-size: 0.875rem; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); }
+        .external-nav a:hover { background-color: #d1d5db; }
+        .external-nav a i { margin-right: 0.3rem; }
+        .external-nav a.disabled { opacity: 0.5; cursor: not-allowed; pointer-events: none; background-color: #f3f4f6; box-shadow: none; }
+        /* Screen-Specific Styles */
+        @keyframes audioWave { 0% { transform: scaleY(0.4); } 25% { transform: scaleY(1.0); } 50% { transform: scaleY(0.6); } 75% { transform: scaleY(0.8); } 100% { transform: scaleY(0.4); } }
+        .audio-bar { width: 5px; height: 30px; background-color: #60a5fa; display: inline-block; margin: 0 2px; animation: audioWave 1.2s infinite ease-in-out; }
+        .audio-bar:nth-child(1) { animation-delay: 0s; } .audio-bar:nth-child(2) { animation-delay: 0.15s; } .audio-bar:nth-child(3) { animation-delay: 0.3s; } .audio-bar:nth-child(4) { animation-delay: 0.45s; } .audio-bar:nth-child(5) { animation-delay: 0.6s; }
+        body.clickable { cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="screen-container">
+        <div class="status-bar flex justify-between items-center text-base p-3 border-b-0">
+            <div class="flex items-center space-x-4"> <i class="fab fa-bluetooth-b text-blue-500 fa-lg"></i> <i class="fas fa-wifi text-green-500 fa-lg"></i> </div>
+            <span>18:39</span>
+            <div class="flex items-center"> <i class="fas fa-battery-three-quarters fa-lg"></i> </div>
+        </div>
+        <div class="content-area flex flex-col justify-between pt-6 pb-4">
+            <p class="text-sm text-gray-400 mb-4 w-full text-left italic">您问: "相比于去年胖了吗?"</p>
+            <div class="flex flex-col items-center justify-center flex-grow">
+                <i class="fas fa-volume-high fa-4x text-cyan-400 mb-4 animate-subtle-pulse"></i>
+                <h2 class="text-lg font-light mb-4 text-gray-300">播报中...</h2>
+                <div class="flex justify-center items-end h-10 space-x-1">
+                    <span class="audio-bar"></span> <span class="audio-bar"></span> <span class="audio-bar"></span>
+                    <span class="audio-bar"></span> <span class="audio-bar"></span>
+                </div>
+            </div>
+            <p class="text-xs text-gray-500 mt-auto text-center">说 "小乐、小乐" 问下一个问题，或等待返回待机</p>
+        </div>
+    </div>
+    <div class="external-nav flex justify-center items-center space-x-4 mt-6">
+        <a href="08_QA_Listening.html" title="上一个"> <i class="fas fa-arrow-left"></i> </a>
+        <a href="index.html" title="回到主页"> <i class="fas fa-home"></i> </a>
+        <a href="10b_QA_Listening_Round2.html" title="下一个 (继续提问)"> <i class="fas fa-arrow-right"></i> </a>
+    </div>
+
+    <audio id="answerSound" src="audio/whd1.mp3" preload="auto" style="display: none;"></audio>
+
+     <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const answerSoundAudio = document.getElementById('answerSound');
+        const nextPageIndex = '10b_QA_Listening_Round2.html'; // *** CORRECTED next page ***
+        let clickable = true;
+        let navigated = false;
+        const errorNavigationDelay = 500;
+        const generalFallbackDelay = 46000; // Keep long fallback
+
+        // Function to navigate
+        function navigateToNextPage() {
+            if (navigated) return;
+            navigated = true;
+            console.log(`Answer sound finished or failed, navigating to ${nextPageIndex}`); // Log updated page
+            const currentPath = window.location.pathname;
+            // Ensure we are still on this page before navigating
+            if (currentPath.includes('10_Answer_And_Speaking.html')) { // Check correct current page
+                 window.location.href = nextPageIndex;
+            }
+        }
+
+        // Function to handle the initial click
+        function handleInitialClick() {
+            if (!clickable) return;
+            clickable = false;
+            document.body.classList.remove('clickable');
+            console.log("Screen clicked, playing answer sound (whd1.mp3) and waiting for end.");
+            if (answerSoundAudio) {
+                answerSoundAudio.addEventListener('ended', navigateToNextPage, { once: true });
+                const playPromise = answerSoundAudio.play();
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
+                        console.log("Answer sound playback started.");
+                        // Set a fallback timer ONLY in case 'ended' event *never* fires
+                        setTimeout(navigateToNextPage, generalFallbackDelay);
+                    }).catch(error => {
+                        console.error("Answer sound playback failed:", error);
+                        answerSoundAudio.removeEventListener('ended', navigateToNextPage);
+                        setTimeout(navigateToNextPage, errorNavigationDelay);
+                    });
+                } else {
+                     console.warn("Audio play() did not return a promise.");
+                     setTimeout(navigateToNextPage, generalFallbackDelay);
+                }
+            } else {
+                console.error("Answer sound audio element #answerSound not found.");
+                setTimeout(navigateToNextPage, errorNavigationDelay);
+            }
+        } // End of handleInitialClick
+
+        // Make body clickable immediately on load
+        document.body.classList.add('clickable');
+        document.body.addEventListener('click', handleInitialClick, { once: true });
+      });
+     </script>
+</body>
+</html>

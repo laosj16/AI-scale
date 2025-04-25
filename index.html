@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI智能体脂秤固件UI原型 - 目录</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        h1 { color: #333; }
+        p.author { color: #555; }
+        h2 { color: #1f2937; border-bottom: 1px solid #e5e7eb; padding-bottom: 0.25rem; margin-top: 1.5rem; }
+        .filename-subtitle { font-size: 0.75rem; color: #9ca3af; margin-top: 0.25rem; display: block; word-break: break-all; }
+        .description-title { font-size: 1rem; font-weight: 600; color: #374151; display: inline; margin-left: 0.25rem; }
+        .list-number { font-size: 1rem; font-weight: 600; color: #374151; display: inline; }
+        li a { color: #374151; }
+        li a:hover { background-color: #f9fafb; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-6">
+    <div class="text-center mb-8">
+        <h1 class="text-3xl font-bold mb-2">AI智能体脂秤固件UI原型</h1>
+        <p class="author text-sm">产品中心-胡中华</p>
+    </div>
+
+    <div class="max-w-5xl w-full">
+        <h2 class="text-xl font-semibold mb-3">初始化流程</h2>
+        <ul class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+            <li class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-200"> <a href="01_Boot_Welcome.html" class="block p-5 transition-colors duration-150"> <span class="list-number">1.</span><span class="description-title">启动欢迎界面</span> <span class="filename-subtitle">01_Boot_Welcome.html</span> </a> </li>
+            <li class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-200"> <a href="02_Idle_Ready.html" class="block p-5 transition-colors duration-150"> <span class="list-number">2.</span><span class="description-title">待机就绪 (踩压)</span> <span class="filename-subtitle">02_Idle_Ready.html</span> </a> </li>
+        </ul>
+
+        <h2 class="text-xl font-semibold mb-3">测量流程 (踩压启动)</h2>
+        <ul class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+             <li class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-200"> <a href="03_Detecting_Weight.html" class="block p-5 transition-colors duration-150"> <span class="list-number">1.</span><span class="description-title">重量侦测/模拟测量</span> <span class="filename-subtitle">03_Detecting_Weight.html</span> </a> </li>
+             <li class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-200"> <a href="04_User_Selection.html" class="block p-5 transition-colors duration-150"> <span class="list-number">2.</span><span class="description-title">用户选择</span> <span class="filename-subtitle">04_User_Selection.html</span> </a> </li>
+             <li class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-200"> <a href="05_LLM_Analyzing.html" class="block p-5 transition-colors duration-150"> <span class="list-number">3.</span><span class="description-title">AI分析中</span> <span class="filename-subtitle">05_LLM_Analyzing.html</span> </a> </li>
+             <li class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-200"> <a href="05_Results_Primary.html" class="block p-5 transition-colors duration-150"> <span class="list-number">4.</span><span class="description-title">核心结果展示 (含图表)</span> <span class="filename-subtitle">05_Results_Primary.html</span> </a> </li>
+             </ul>
+
+         <h2 class="text-xl font-semibold mb-3">语音唤醒/问答流程 (支持两轮)</h2> <ul class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+             <li class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-200"> <a href="08_QA_Listening.html" class="block p-5 transition-colors duration-150"> <span class="list-number">1.</span><span class="description-title">问答监听中 (第一轮)</span> <span class="filename-subtitle">08_QA_Listening.html</span> </a> </li>
+             <li class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-200">
+                 <a href="10_Answer_And_Speaking.html" class="block p-5 transition-colors duration-150">
+                     <span class="list-number">2.</span><span class="description-title">问答展示&播报 (第一轮)</span>
+                     <span class="filename-subtitle">10_Answer_And_Speaking.html</span>
+                 </a>
+             </li>
+              <li class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-200"> <a href="10b_QA_Listening_Round2.html" class="block p-5 transition-colors duration-150">
+                     <span class="list-number">3.</span><span class="description-title">问答监听中 (第二轮)</span>
+                     <span class="filename-subtitle">10b_QA_Listening_Round2.html</span>
+                 </a>
+             </li>
+              <li class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-200"> <a href="10c_Answer_And_Speaking_Round2.html" class="block p-5 transition-colors duration-150">
+                     <span class="list-number">4.</span><span class="description-title">问答展示&播报 (第二轮)</span>
+                     <span class="filename-subtitle">10c_Answer_And_Speaking_Round2.html</span>
+                 </a>
+             </li>
+             </ul>
+
+         <h2 class="text-xl font-semibold mb-3">其他状态</h2>
+         <ul class="grid grid-cols-1 md:grid-cols-3 gap-6">
+             <li class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-200"> <a href="12_Error.html" class="block p-5 transition-colors duration-150"> <span class="list-number">1.</span><span class="description-title">错误提示</span> <span class="filename-subtitle">12_Error.html</span> </a> </li>
+             <li class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-200"> <a href="13_Shutdown.html" class="block p-5 transition-colors duration-150"> <span class="list-number">2.</span><span class="description-title">关机界面</span> <span class="filename-subtitle">13_Shutdown.html</span> </a> </li>
+             <li class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-200"> <a href="14_Low_Battery.html" class="block p-5 transition-colors duration-150"> <span class="list-number">3.</span><span class="description-title">低电量提醒</span> <span class="filename-subtitle">14_Low_Battery.html</span> </a> </li>
+         </ul>
+    </div>
+
+</body>
+</html>
