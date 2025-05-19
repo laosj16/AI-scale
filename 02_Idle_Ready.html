@@ -31,18 +31,19 @@
 </head>
 <body>
     <div class="screen-container">
-        <div class="status-bar flex justify-between items-center text-base p-3 border-b-0">
-            <div class="flex items-center space-x-4"> <i class="fab fa-bluetooth-b fa-lg"></i> <i class="fas fa-wifi fa-lg"></i> </div>
-            <span>11:38</span> <div class="flex items-center"> <i class="fas fa-battery-three-quarters fa-lg"></i> </div>
+        <div class="status-bar flex justify-between items-center text-sm p-2 border-b-0"> 
+            <div class="flex items-center space-x-3"> <i class="fab fa-bluetooth-b"></i> <i class="fas fa-wifi"></i> </div> 
+            <span>11:38</span> <div class="flex items-center"> <i class="fas fa-battery-three-quarters"></i> </div>
         </div>
-        <div class="content-area justify-between">
-             <div class="flex flex-col items-center justify-center flex-grow">
-                 <div id="weightDisplayContainer" class="text-center text-gray-200">
-                    <span id="weightInteger" class="text-[8rem] font-medium tracking-tight leading-none">0</span>
-                    <span id="weightDecimal" class="text-[4rem] font-medium tracking-tight leading-none ml-1">.0</span> <span class="absolute top-0 right-0 text-2xl font-light text-gray-200 mt-1 mr-[-1.5em]">kg</span>
+        <div class="content-area flex flex-col justify-center items-center py-4 px-2"> 
+             <div class="flex flex-col items-center justify-center mb-4"> 
+                 <div id="weightDisplayContainer" class="text-center text-gray-200 relative"> 
+                    <span id="weightInteger" class="text-[5rem] font-medium tracking-tight leading-none">0</span> 
+                    <span id="weightDecimal" class="text-[2.5rem] font-medium tracking-tight leading-none ml-1">.0</span> 
+                    <span class="absolute bottom-1 right-[-1.8em] text-xl font-light text-gray-200">kg</span> 
                 </div>
              </div>
-            <p id="promptText" class="text-gray-400 text-xl text-center pb-4 w-2/3 mx-auto">请站上体脂秤</p>
+            <p id="promptText" class="text-gray-400 text-lg text-center">请站上体脂秤</p> 
         </div>
     </div>
     <div class="external-nav flex justify-center items-center space-x-4 mt-6">

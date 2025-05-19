@@ -23,10 +23,10 @@ body.prototype-page {
     padding: 1rem; /* Add some padding */
 }
 
-/* Screen container simulating the 320x480 display */
+/* Screen container simulating the 320x240 display */
 .screen-container {
   width: 320px;
-  height: 480px;
+  height: 240px;
   background-color: #121212; /* Dark background */
   color: #e0e0e0; /* Default text color */
   overflow: hidden;
@@ -54,9 +54,9 @@ body.prototype-page {
   display: flex;
   flex-direction: column;
   /* align-items and justify-content set per page via Tailwind */
-  padding: 20px;
+  padding: 20px; /* Default padding, can be overridden by Tailwind on a per-page basis */
   text-align: center;
-  overflow-y: auto; /* Allow scrolling if content overflows */
+  overflow: hidden; /* Prevent scrolling on the screen */
 }
 
 /* External Demo Navigation Button Styles */
@@ -129,4 +129,3 @@ body.prototype-page {
 #progressBarInner, #progressBarInnerMeasuring { /* Common progress bar transition */
     transition: width 0.1s linear;
 }
-

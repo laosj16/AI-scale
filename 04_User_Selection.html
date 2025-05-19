@@ -15,15 +15,14 @@
         .external-nav a i { margin-right: 0.3rem; }
         .external-nav a.disabled { opacity: 0.5; cursor: not-allowed; pointer-events: none; background-color: #f3f4f6; box-shadow: none; }
         /* --- Screen-Specific Styles --- */
-        .carousel-container { width: 100%; overflow: hidden; position: relative; height: 220px; display: flex; align-items: center; margin-top: 0.5rem; }
+        .carousel-container { width: 100%; overflow: hidden; position: relative; height: 150px; display: flex; align-items: center; margin-top: 0.25rem; }
         .carousel-slider { display: flex; transition: transform 0.5s ease-in-out; position: absolute; left: 0; height: 100%; align-items: center; }
-        .user-item { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 120px; margin: 0 15px; text-align: center; opacity: 0.5; transform: scale(0.75); transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out; flex-shrink: 0; }
+        .user-item { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 90px; margin: 0 10px; text-align: center; opacity: 0.5; transform: scale(0.75); transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out; flex-shrink: 0; }
         .user-item.active { opacity: 1; transform: scale(1); }
-        .user-avatar { background-color: #4b5563; display: flex; align-items: center; justify-content: center; margin-bottom: 0.75rem; border: 4px solid transparent; overflow: hidden; }
-        .user-item.active .user-avatar { border-color: #2dd4bf; box-shadow: 0 0 15px rgba(45, 212, 191, 0.5); }
-        .user-name { color: #e0e0e0; font-weight: 500; font-size: 1rem; }
+        .user-avatar { background-color: #4b5563; display: flex; align-items: center; justify-content: center; margin-bottom: 0.5rem; border: 3px solid transparent; overflow: hidden; }
+        .user-item.active .user-avatar { border-color: #2dd4bf; box-shadow: 0 0 10px rgba(45, 212, 191, 0.5); }
+        .user-name { color: #e0e0e0; font-weight: 500; font-size: 0.875rem; }
         .user-item.active .user-name { font-weight: 600; color: #fff; }
-        /* Removed Countdown Styles */
         /* Style for clickable body */
         body.clickable {
             cursor: pointer;
@@ -32,20 +31,22 @@
 </head>
 <body>
     <div class="screen-container">
-        <div class="status-bar flex justify-between items-center text-base p-3 border-b-0">
-            <div class="flex items-center space-x-4"> <i class="fab fa-bluetooth-b text-blue-500 fa-lg"></i> <i class="fas fa-wifi text-green-500 fa-lg"></i> </div>
-            <span>15:38</span> <div class="flex items-center"> <i class="fas fa-battery-three-quarters fa-lg"></i> </div>
+        <div class="status-bar flex justify-between items-center text-sm p-2 border-b-0"> 
+            <div class="flex items-center space-x-3"> <i class="fab fa-bluetooth-b text-blue-500"></i> <i class="fas fa-wifi text-green-500"></i> </div>
+            <span>15:38</span> <div class="flex items-center"> <i class="fas fa-battery-three-quarters"></i> </div>
         </div>
-        <div class="content-area justify-center items-center"> <div class="carousel-container">
+        <div class="content-area justify-center items-center py-2 px-4"> 
+            <div class="carousel-container">
                 <div id="carouselSlider" class="carousel-slider">
-                    <div class="user-item active" data-user-id="guest" data-index="0"> <div class="user-avatar w-24 h-24 rounded-2xl bg-gray-600 text-gray-300"><i class="fas fa-user-circle text-4xl"></i></div> <div class="user-name text-base">游客</div> </div>
-                    <div class="user-item" data-user-id="dadong" data-index="1"> <div class="user-avatar w-24 h-24 rounded-2xl bg-gray-600 text-gray-300"><i class="fas fa-user-astronaut text-4xl"></i></div> <div class="user-name text-base">大东</div> </div>
-                    <div class="user-item" data-user-id="xiaohe" data-index="2"> <div class="user-avatar w-24 h-24 rounded-2xl bg-gray-600 text-gray-300"><i class="fas fa-user-ninja text-4xl"></i></div> <div class="user-name text-base">小何</div> </div>
-                    <div class="user-item" data-user-id="huazai" data-index="3"> <div class="user-avatar w-24 h-24 rounded-2xl bg-gray-600 text-gray-300"><i class="fas fa-user-tie text-4xl"></i></div> <div class="user-name text-base">华仔</div> </div>
-                    </div>
+                    
+                    <div class="user-item active" data-user-id="guest" data-index="0"> <div class="user-avatar w-16 h-16 rounded-xl bg-gray-600 text-gray-300"><i class="fas fa-user-circle text-2xl"></i></div> <div class="user-name">游客</div> </div>
+                    <div class="user-item" data-user-id="dadong" data-index="1"> <div class="user-avatar w-16 h-16 rounded-xl bg-gray-600 text-gray-300"><i class="fas fa-user-astronaut text-2xl"></i></div> <div class="user-name">大东</div> </div>
+                    <div class="user-item" data-user-id="xiaohe" data-index="2"> <div class="user-avatar w-16 h-16 rounded-xl bg-gray-600 text-gray-300"><i class="fas fa-user-ninja text-2xl"></i></div> <div class="user-name">小何</div> </div>
+                    <div class="user-item" data-user-id="huazai" data-index="3"> <div class="user-avatar w-16 h-16 rounded-xl bg-gray-600 text-gray-300"><i class="fas fa-user-tie text-2xl"></i></div> <div class="user-name">华仔</div> </div>
+                </div>
             </div>
-            <p class="text-xl font-semibold text-gray-300 mt-4">轻触秤面以切换用户</p>
-            </div>
+            <p class="text-lg font-semibold text-gray-300 mt-2">轻触秤面以切换用户</p> 
+        </div>
     </div>
     <div class="external-nav flex justify-center items-center space-x-4 mt-6">
         <a href="03_Detecting_Weight.html" title="上一个"> <i class="fas fa-arrow-left"></i> </a>
@@ -61,9 +62,9 @@
         const originalItems = slider ? Array.from(slider.querySelectorAll('.user-item')) : [];
         const userSelectAudio = document.getElementById('userSelectSound');
         const totalRealItems = originalItems.length;
-        const itemWidth = 120; const itemMargin = 15; const containerWidth = 320;
-        const cloneCount = 2; // Keep clones for seamless visual effect
-        let currentDisplayIndex = cloneCount; // Start at first real item
+        const itemWidth = 90; const itemMargin = 10; const containerWidth = 320; // Adjusted itemWidth and itemMargin
+        const cloneCount = 2; 
+        let currentDisplayIndex = cloneCount; 
         let sequentialSwitchIntervalId = null; // Use Interval for fixed timing
         const switchIntervalDuration = 800; // Fixed 0.8 seconds interval
         const totalSwitches = totalRealItems; // Switch through all users once

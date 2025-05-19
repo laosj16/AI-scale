@@ -15,39 +15,40 @@
         .external-nav a i { margin-right: 0.3rem; }
         .external-nav a.disabled { opacity: 0.5; cursor: not-allowed; pointer-events: none; background-color: #f3f4f6; box-shadow: none; }
         /* Screen-Specific Styles */
-        .metric-carousel-container { position: relative; height: 150px; width: 100%; margin-top: 0.5rem; margin-bottom: 1rem; }
+        .metric-carousel-container { position: relative; height: 80px; width: 100%; margin-top: 0; margin-bottom: 0.25rem; }
         .metric-slide { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.5s ease-in-out; text-align: center; }
         .metric-slide.active { opacity: 1; }
-        .metric-value { font-size: 4rem; font-weight: 300; line-height: 1.1; }
-        .metric-unit { font-size: 1.5rem; font-weight: 300; margin-left: 0.25rem; }
-        .metric-name { font-size: 1rem; color: #9ca3af; margin-top: 0.25rem; }
-        .score-value { font-size: 4rem; font-weight: 600; }
-        .score-name { font-size: 1rem; color: #9ca3af; margin-top: 0.25rem; }
+        .metric-value { font-size: 2.5rem; font-weight: 300; line-height: 1.1; }
+        .metric-unit { font-size: 1rem; font-weight: 300; margin-left: 0.15rem; }
+        .metric-name { font-size: 0.75rem; color: #9ca3af; margin-top: 0.1rem; }
+        .score-value { font-size: 2.5rem; font-weight: 600; }
+        .score-name { font-size: 0.75rem; color: #9ca3af; margin-top: 0.1rem; }
         .chart-area { background-color: rgba(255, 255, 255, 0.03); border-radius: 0.5rem; }
-        .trend-line { fill: none; stroke-width: 1.5px; stroke-linejoin: round; stroke-linecap: round; }
-        .axis path.domain { stroke: #4b5563; stroke-width: 1; }
+        .trend-line { fill: none; stroke-width: 1px; stroke-linejoin: round; stroke-linecap: round; }
+        .axis path.domain { stroke: #4b5563; stroke-width: 0.5px; }
         .axis .tick line { stroke: none; }
-        .axis .tick text { fill: #9ca3af; font-size: 9px; }
-        .data-label { fill: #e0e0e0; font-size: 9px; font-weight: 500; text-anchor: middle; }
+        .axis .tick text { fill: #9ca3af; font-size: 7px; }
+        .data-label { fill: #e0e0e0; font-size: 7px; font-weight: 500; text-anchor: middle; }
         body.clickable { cursor: pointer; }
     </style>
 </head>
 <body>
     <div class="screen-container">
-        <div class="status-bar flex justify-between items-center text-base p-3 border-b-0">
-            <div class="flex items-center space-x-4"> <i class="fab fa-bluetooth-b text-blue-500 fa-lg"></i> <i class="fas fa-wifi text-green-500 fa-lg"></i> </div>
+        <div class="status-bar flex justify-between items-center text-sm p-2 border-b-0"> 
+            <div class="flex items-center space-x-3"> <i class="fab fa-bluetooth-b text-blue-500"></i> <i class="fas fa-wifi text-green-500"></i> </div>
             <span>19:13</span>
-            <div class="flex items-center"> <i class="fas fa-battery-three-quarters fa-lg"></i> </div>
+            <div class="flex items-center"> <i class="fas fa-battery-three-quarters"></i> </div>
         </div>
-        <div class="content-area flex-col justify-between pt-4 pb-4">
-            <div class="text-center">
-                <div class="flex items-center justify-center space-x-2 bg-gray-800 px-2 py-1 rounded-full self-center mb-2">
-                    <i class="fas fa-user-tie text-cyan-400 text-lg"></i>
-                    <span class="text-base font-medium">华仔</span>
+        <div class="content-area flex-col justify-between pt-1 pb-1 px-2"> 
+            <div class="text-center mb-1"> 
+                <div class="flex items-center justify-center space-x-1 bg-gray-800 px-1.5 py-0.5 rounded-full self-center mb-0.5"> 
+                    <i class="fas fa-user-tie text-cyan-400 text-sm"></i> 
+                    <span class="text-xs font-medium">华仔</span> 
                 </div>
-                <p class="text-sm text-gray-400">请说 “小乐、小乐” 进行提问</p>
+                <p class="text-xs text-gray-400">请说 “小乐、小乐” 进行提问</p> 
             </div>
-            <div id="metricCarousel" class="metric-carousel-container">
+            <div id="metricCarousel" class="metric-carousel-container"> 
+                
                 <div class="metric-slide active" data-metric="体重"> <div> <span class="metric-value text-accent">75.3</span><span class="metric-unit text-accent">kg</span> </div> <div class="metric-name">体重</div> </div>
                  <div class="metric-slide" data-metric="心率"> <div> <span class="metric-value text-red-400">68</span><span class="metric-unit text-red-400">bpm</span> </div> <div class="metric-name">心率</div> </div>
                  <div class="metric-slide" data-metric="BMI"> <span class="metric-value text-blue-400">24.8</span> <div class="metric-name">BMI</div> </div>
@@ -56,7 +57,7 @@
                  <div class="metric-slide" data-metric="水分率"> <div> <span class="metric-value text-teal-400">60.1</span><span class="metric-unit text-teal-400">%</span> </div> <div class="metric-name">水分率</div> </div>
                  <div class="metric-slide" data-metric="健康评分"> <span class="score-value text-green-400">85</span> <div class="score-name">健康评分</div> </div>
             </div>
-            <div class="w-full h-40 chart-area p-2">
+            <div class="w-full h-20 chart-area p-1"> 
                  <svg id="trendChart" class="w-full h-full"></svg>
             </div>
         </div>
@@ -80,20 +81,20 @@
         let clickable = true;
 
         if (!carousel || !chartContainer || slides.length === 0) { console.error("Essential elements not found."); return; }
-        if (typeof d3 === 'undefined') { console.error("D3.js not loaded."); chartContainer.innerHTML = '<text x="10" y="20" fill="#9ca3af">无法加载图表库</text>'; return; }
+        if (typeof d3 === 'undefined') { console.error("D3.js not loaded."); chartContainer.innerHTML = '<text x="5" y="15" fill="#9ca3af" font-size="10px">无法加载图表库</text>'; return; } 
         const totalSlides = slides.length; let currentSlideIndex = 0;
-        const intervalTime = 2000;
-        const trendData = { /* ... (same data) ... */
+        const intervalTime = 2000; 
+        const trendData = { 
             '体重':    [{day:"-6", value:75.1}, {day:"-5", value:75.5}, {day:"-4", value:75.2}, {day:"-3", value:75.6}, {day:"-2", value:75.4}, {day:"-1", value:75.8}, {day:"今天", value:75.3}], '心率':    [{day:"-6", value:70}, {day:"-5", value:69}, {day:"-4", value:71}, {day:"-3", value:67}, {day:"-2", value:68}, {day:"-1", value:70}, {day:"今天", value:68}], 'BMI':     [{day:"-6", value:24.7}, {day:"-5", value:24.9}, {day:"-4", value:24.7}, {day:"-3", value:24.9}, {day:"-2", value:24.8}, {day:"-1", value:25.0}, {day:"今天", value:24.8}], '体脂率': [{day:"-6", value:18.6}, {day:"-5", value:18.4}, {day:"-4", value:18.5}, {day:"-3", value:18.3}, {day:"-2", value:18.4}, {day:"-1", value:18.2}, {day:"今天", value:18.5}], '肌肉率': [{day:"-6", value:55.1}, {day:"-5", value:55.3}, {day:"-4", value:55.2}, {day:"-3", value:55.4}, {day:"-2", value:55.3}, {day:"-1", value:55.5}, {day:"今天", value:55.2}], '水分率': [{day:"-6", value:60.0}, {day:"-5", value:60.2}, {day:"-4", value:60.1}, {day:"-3", value:60.3}, {day:"-2", value:60.2}, {day:"-1", value:60.4}, {day:"今天", value:60.1}], '健康评分':[{day:"-6", value:86}, {day:"-5", value:84}, {day:"-4", value:85}, {day:"-3", value:87}, {day:"-2", value:86}, {day:"-1", value:88}, {day:"今天", value:85}]
         };
-        const dayLabels = ["6天前", "5天前", "4天前", "3天前", "2天前", "1天前", "今天"];
-        const metricColors = { /* ... (same colors) ... */
+        const dayLabels = ["-6", "-5", "-4", "-3", "-2", "-1", "今"]; 
+        const metricColors = { 
             '体重': '#2dd4bf', '心率': '#f87171', 'BMI': '#60a5fa', '体脂率': '#facc15', '肌肉率': '#a78bfa', '水分率': '#2dd4bf', '健康评分': '#4ade80', 'default': '#2dd4bf'
         };
-        function drawChart(metricName, data) { /* ... (same drawing logic) ... */
-            console.log(`Drawing chart for: ${metricName}`, data); if (!data || !Array.isArray(data) || data.length < 2 || !chartContainer) { d3.select(chartContainer).selectAll("*").remove(); d3.select(chartContainer).append("text").attr("x", 10).attr("y", 20).attr("fill", "#9ca3af").style("font-size", "10px").text("无足够数据"); return; } const svg = d3.select(chartContainer); svg.selectAll("*").remove(); const bounds = chartContainer.getBoundingClientRect(); const margin = { top: 15, right: 15, bottom: 20, left: 15 }; const width = bounds.width - margin.left - margin.right; const height = bounds.height - margin.top - margin.bottom; if (width <= 0 || height <= 0) { console.error("Chart container has invalid dimensions."); return; } const g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`); const xScale = d3.scalePoint().domain(dayLabels).range([0, width]).padding(0.5); const [minVal, maxVal] = d3.extent(data, d => d.value); const yPadding = (maxVal - minVal) * 0.2 || (maxVal * 0.1) || 1; const yScale = d3.scaleLinear().domain([minVal - yPadding, maxVal + yPadding]).nice().range([height, 0]); const xAxis = d3.axisBottom(xScale).tickSize(0).tickPadding(6); g.append("g").attr("class", "axis x-axis").attr("transform", `translate(0,${height})`).call(xAxis).select(".domain").remove(); const line = d3.line().x((d, i) => xScale(dayLabels[i])).y(d => yScale(d.value)).curve(d3.curveCatmullRom.alpha(0.5)); const lineColor = metricColors[metricName] || metricColors['default']; const path = g.append("path").datum(data).attr("class", "trend-line").attr("stroke", lineColor).attr("d", line); g.selectAll(".data-label").data(data).enter().append("text").attr("class", "data-label").attr("x", (d, i) => xScale(dayLabels[i])).attr("y", d => yScale(d.value)).attr("dy", "-0.6em").attr("fill", lineColor).text(d => d.value.toFixed(1));
+        function drawChart(metricName, data) { 
+            console.log(`Drawing chart for: ${metricName}`, data); if (!data || !Array.isArray(data) || data.length < 2 || !chartContainer) { d3.select(chartContainer).selectAll("*").remove(); d3.select(chartContainer).append("text").attr("x", 5).attr("y", 15).attr("fill", "#9ca3af").style("font-size", "8px").text("无足够数据"); return; } const svg = d3.select(chartContainer); svg.selectAll("*").remove(); const bounds = chartContainer.getBoundingClientRect(); const margin = { top: 10, right: 10, bottom: 15, left: 10 };  const width = bounds.width - margin.left - margin.right; const height = bounds.height - margin.top - margin.bottom; if (width <= 0 || height <= 0) { console.error("Chart container has invalid dimensions."); return; } const g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`); const xScale = d3.scalePoint().domain(dayLabels).range([0, width]).padding(0.5); const [minVal, maxVal] = d3.extent(data, d => d.value); const yPadding = (maxVal - minVal) * 0.15 || (maxVal * 0.05) || 0.5;  const yScale = d3.scaleLinear().domain([minVal - yPadding, maxVal + yPadding]).nice().range([height, 0]); const xAxis = d3.axisBottom(xScale).tickSize(0).tickPadding(4);  g.append("g").attr("class", "axis x-axis").attr("transform", `translate(0,${height})`).call(xAxis).select(".domain").remove(); const line = d3.line().x((d, i) => xScale(dayLabels[i])).y(d => yScale(d.value)).curve(d3.curveCatmullRom.alpha(0.5)); const lineColor = metricColors[metricName] || metricColors['default']; const path = g.append("path").datum(data).attr("class", "trend-line").attr("stroke", lineColor).attr("d", line); g.selectAll(".data-label").data(data).enter().append("text").attr("class", "data-label").attr("x", (d, i) => xScale(dayLabels[i])).attr("y", d => yScale(d.value)).attr("dy", "-0.4em").attr("fill", lineColor).text(d => d.value.toFixed(1)); 
         }
-        function showSlide(index) { /* ... (same logic) ... */
+        function showSlide(index) { 
              if (index < 0 || index >= totalSlides) return; slides.forEach((slide, i) => { slide.classList.toggle('active', i === index); }); const currentMetricName = slides[index].dataset.metric || '体重'; const currentData = trendData[currentMetricName] || []; requestAnimationFrame(() => drawChart(currentMetricName, currentData)); currentSlideIndex = index;
         }
         if (slides.length > 0) { // Initial Setup for Carousel/Chart
